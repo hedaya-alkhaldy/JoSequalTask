@@ -32,3 +32,19 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 Route::resource('kmls', App\Http\Controllers\KMLController::class);
+
+
+Route::get('/checkKml', [App\Http\Controllers\KMLController::class, 'checkKmlFile'])->name('check.Kmls');
+
+
+// Route::get('/checkKml/action', [App\Http\Controllers\KMLControlle::class, 'checkKmlFile'])->name('check.Kmls');
+
+Route::post('/ajax_upload/action', [App\Http\Controllers\KMLController::class, 'action'])->name('ajaxupload.action');
+Route::post('/test/{id}', [App\Http\Controllers\KMLController::class, 'test'])->name('test.action');
+
+
+
+Route::get('/map', function () {
+    return view('k_m_l_s.map');
+})->name('map');
+

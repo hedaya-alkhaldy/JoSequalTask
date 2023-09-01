@@ -1,5 +1,26 @@
 @extends('layouts.app')
 
+@section('content')
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+
+                <div class="col-sm-12">
+                    <h1>
+                    Create K M L S
+
+                    </h1>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+<!DOCTYPE html>
+<html>
 
 <head>
     <title>Upload a KML file in Laravel using Ajax and display on a Leaflet Map</title>
@@ -13,17 +34,17 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
-
 <body>
+    <div id="map" style="height: 300px; width:1000px ; margin-left:50px"></div>
     <br />
     <div class="container">
-            <div id="map" style="height: 200px; width:400px ;   align-items: center;
-            " ></div>
-
-        <h3 align="center">Uploading a KML file using Ajax and Displaying on a Leaflet Map</h3>
         <br />
         <form method="post" id="upload_form" enctype="multipart/form-data">
             {{ csrf_field() }}
+
+            <div id="myAlert" style="display: none;" class="alert alert-success" role="alert">
+                File Uploaded and Saved Successfully
+                      </div>
             <div class="form-group">
                 <table class="table">
                     <tr>
@@ -39,14 +60,14 @@
 
 </html>
 
-
-
 <script>
     // initialize Leaflet
     var map = L.map('map').setView({
-        lat: 32.559299,
-        lon:  35.841709
+        lon: -1.534,
+        lat: 47.213
     }, 11);
+
+
     // add the OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -57,9 +78,44 @@
     $(document).ready(function() {
         $('#upload_form').on('submit', function(event) {
             event.preventDefault();
+            $.ajax({
+                url: "{{ route('ajaxupload.action') }}",
+                method: "POST",
+                data: new FormData(this),
+                dataType: 'JSON',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data) {
+                    $('#message').css('display', 'block');
+                    $('#message').html(data.message);
+                    $('#message').addClass(data.class_name);
+                    $('#uploaded_image').html(data.uploaded_file);
 
+                    var tmp = data.uploaded_file;
+                    console.log('test',data.uploaded_file);
+                    fetch(tmp)  //get the location with the new name of the saved file
+                        .then(res => res.text())
+                        .then(kmltext => {
+                            // Create new kml overlay
+                            const track = new omnivore.kml.parse(kmltext);
+                            map.addLayer(track);    //add a layer with the coordinates in the file
+                            // Adjust map to show the kml
+                            const bounds = track.getBounds();
+                            map.fitBounds(bounds);
+                        }).catch((e) => {
+                            console.log(e);
+                        })
+
+                        document.getElementById('myAlert').style.display = 'block';
+
+
+
+                }
+            })
         });
     });
 </script>
 
 
+@endsection

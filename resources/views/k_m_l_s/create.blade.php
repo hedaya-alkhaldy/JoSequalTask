@@ -14,6 +14,7 @@
     </section>
 
     <div class="content px-3">
+        @include('flash::message')
 
         @include('adminlte-templates::common.errors')
 
@@ -24,13 +25,13 @@
             <div class="card-body">
 
                 <div class="row">
-                    @include('k_m_l_s.fields')
+                    @include('k_m_l_s.map')
                 </div>
 
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+
                 <a href="{{ route('kmls.index') }}" class="btn btn-default"> Cancel </a>
             </div>
 
@@ -38,4 +39,10 @@
 
         </div>
     </div>
+
+
+
 @endsection
+
+
+

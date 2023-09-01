@@ -14,14 +14,14 @@
                     <td  style="width: 120px">
                         {!! Form::open(['route' => ['kmls.destroy', $kml->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
-                            <a href="{{ route('kmls.show', [$kml->id]) }}"
+                            {{--  <a href="{{ route('kmls.show', [$kml->id]) }}"
                                class='btn btn-default btn-xs'>
                                 <i class="far fa-eye"></i>
                             </a>
                             <a href="{{ route('kmls.edit', [$kml->id]) }}"
                                class='btn btn-default btn-xs'>
                                 <i class="far fa-edit"></i>
-                            </a>
+                            </a>  --}}
                             {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
                         </div>
                         {!! Form::close() !!}
